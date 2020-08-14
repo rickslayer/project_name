@@ -2,27 +2,38 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
       dark
+      color="teal darken-4"  
     >
-      <v-spacer></v-spacer>
+    <a href="https://prra.dev">
+    <v-img
+          alt="PRRA Logo"
+          class="shrink mr-2"
+          contain
+          src='https://res.cloudinary.com/prra/image/upload/c_scale,w_500/v1587654993/PRRA.site/logo.prra_sxtsgv.png'
+          transition="scale-transition"
+          width="157"
+        />
+      </a>
+    <v-spacer></v-spacer>
     </v-app-bar>
     <v-main>
-      <HelloWorld/>
+      <NameProject/>
+      <Footer/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
-
-
+import NameProject from './components/NameProject';
+import Footer from './components/Footer'
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    NameProject,
+    Footer
   },
 
   data: () => ({
