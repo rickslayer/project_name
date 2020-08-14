@@ -1,4 +1,4 @@
-# project_name
+# project-name
 A simple project that's show the frequencies from determinated name in Brazil
 
 # datas from IBGE an organization from Brazil to metrics and statistics
