@@ -1,8 +1,9 @@
 <template>
   <v-container>
+     
     <v-row class="text-center">
       <v-col cols="12">
-        <h1 class="text-center display-1">Digite seu nome e a cidade e veja a frequência de nascimentos em cada década</h1>
+        <h1 class="text-center display-1">Digite um nome e uma cidade para ver a frequência dos nascimentos por década</h1>
       </v-col>
       <v-col cols=12>
         <v-alert 
@@ -13,15 +14,19 @@
            Não houve nenhum registro do nome {{this.name}} na cidade {{nome_cidade}}.
         </v-alert>
       </v-col>
-      <v-col cols="6">
+    
+      <v-col cols="12" sm="6">
           <v-text-field
-            label="Digite seu nome aqui"
-            single-line
+            label="Seu Nome"
+            placeholder="digite seu primeiro nome"
+            dense
+            filled
             v-model="name"
             @change="getDataNames"
+            @keyup="uppercaseName"
           ></v-text-field>
       </v-col>
-      <v-col cols="6">
+      <v-col cols="12" sm="6">
          <v-autocomplete
           v-model="model"
           :items="items"
@@ -34,10 +39,14 @@
           item-value="id"
           label="Sua Cidade"
           placeholder="Comece a digitar para pesquisar"
-          prepend-icon="mdi-database-search"
           return-object
+          dense
+          filled
           @change="getSelected"
       ></v-autocomplete>
+      </v-col>
+      <v-col cols=12>
+        <h1 class="text--secondary" v-show="showCounter">Total de nomes: {{counter}}</h1>
       </v-col>
       <v-col cols="12">
         <v-sparkline
@@ -67,8 +76,6 @@
             class="elevation-1"
           ></v-data-table>
       </v-col>
-    
-
     </v-row>
   </v-container>
 </template>
@@ -77,12 +84,7 @@
 const axios = require('axios')
 
  const gradients = [
-    ['#222'],
-    ['#42b3f4'],
-    ['red', 'orange', 'yellow'],
-    ['purple', 'violet'],
     ['#00c6ff', '#F0F', '#FF0'],
-    ['#f72047', '#ffd200', '#1feaea'],
   ]
   export default {
     name: 'NameProject',
@@ -92,7 +94,7 @@ const axios = require('axios')
       radius: 10,
       padding: 8,
       lineCap: 'round',
-      gradient: gradients[4],
+      gradient: gradients[0],
       value: [],
       labels: [],
       gradientDirection: 'top',
@@ -103,18 +105,19 @@ const axios = require('axios')
       name:"",
       headers: [
         {
-          text: "Período de 10 em 10 anos",
+          text: "Período",
           align: 'start',
           sortable: false,
           value: 'periodo'
-
         },
         {
-          text: "Frequência dos nomes por década",
+          text: "Frequência p/ década",
           value: 'frequencia'
-
         },
-
+        {
+          text: "Nome",
+          value: "nome_pessoa"
+        }
       ],
       names:[],
       showTable: false,
@@ -124,7 +127,10 @@ const axios = require('axios')
       model: null,
       search: null,
       showAlert:false,
-      nome_cidade: ""
+      nome_cidade: "",
+      counter: 0,
+      showCounter: false
+      
     }),
     computed: {
       fields () {
@@ -150,6 +156,10 @@ const axios = require('axios')
     },
 
     methods: {
+      uppercaseName(e) {
+       let letter = e.target.value
+       this.name = letter.toUpperCase()
+      },
       getDataNames() {
          let name = this.name
          if (name.length > 0){
@@ -166,23 +176,26 @@ const axios = require('axios')
               let periodos = []
               let frequencias = []
               this.names = []
+              this.counter = 0
             for (let item of data.res) {
                 var per = item.periodo
                 per = per.replace(']', '')
                 per = per.replace('[', '')
                 per = per.replace('0[', '0')
                 per = per.replace(',', ' ==========> ')
-                
+                this.counter += item.frequencia
                 frequencias.push(item.frequencia)
                 periodos.push(per)
                 this.names.push({
                   "periodo": per,
-                  "frequencia": item.frequencia
+                  "frequencia": item.frequencia,
+                  "nome_pessoa": this.name
                 })
               }
               this.value = frequencias
               this.labels = periodos
               this.showTable = true
+              this.showCounter = true
 
             }else {
               this.showAlert = true
@@ -192,6 +205,7 @@ const axios = require('axios')
               this.showTable = false
               this.entries=[]
               this.model=null
+              this.showCounter = false
               setTimeout(()=>{
                 this.showAlert=false
               },6500)

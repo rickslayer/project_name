@@ -16,7 +16,44 @@
         />
       </a>
     <v-spacer></v-spacer>
+    <v-tooltip bottom>
+       <template v-slot:activator="{ on, attrs }">
+       <v-btn 
+       @click="dialog = true"
+       icon 
+       color="white"
+        v-bind="attrs"
+          v-on="on">
+      <v-icon>mdi-information</v-icon>
+    </v-btn>
+       </template>
+    <span>De onde são esses dados?</span>
+    </v-tooltip>
     </v-app-bar>
+    <v-dialog
+      v-model="dialog"
+      max-width="350"
+    >
+      <v-card>
+        <v-card-title class="headline">Dados originais do IBGE</v-card-title>
+
+        <v-card-text>
+Este projeto utiliza dados dos serviços oficiais do IBGE localizados na página <a target="_blank" href="https://servicodados.ibge.gov.br/api/docs">https://servicodados.ibge.gov.br/api/docs</a>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            Ok
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-main>
       <NameProject/>
       <Footer/>
@@ -37,7 +74,7 @@ export default {
   },
 
   data: () => ({
-    
+    dialog:false,
   }),
 };
 </script>
