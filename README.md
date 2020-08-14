@@ -1,9 +1,10 @@
 # project-name
 A simple project that's show the frequencies from determinated name in Brazil
 
-# datas from IBGE an organization from Brazil to metrics and statistics
+# Datas from IBGE an organization from Brazil
+```https://www.ibge.gov.br/```
 
-## Documentation of used APIs
+## APIs documentation
 ```https://servicodados.ibge.gov.br/api/docs/censos/nomes?versao=2```
 
 ## Endpoints used
